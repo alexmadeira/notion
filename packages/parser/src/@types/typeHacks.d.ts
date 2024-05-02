@@ -1,23 +1,28 @@
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints.js'
 
-export type PartialDatabaseResult = QueryDatabaseResponse['results'][number]
+export type TPartialDatabaseResult = QueryDatabaseResponse['results'][number]
 
-export type DatabaseResult = Extract<
-  PartialDatabaseResult,
+export type TDatabaseResult = Extract<
+  TPartialDatabaseResult,
   { properties: unknown }
 >
 
-export type NotionPageProperties = DatabaseResult['properties']
-export type NotionPagePropertiesValues = NotionPageProperties[string]
+export type TNotionPageProperties = TDatabaseResult['properties']
+export type TNotionPagePropertiesValues = TNotionPageProperties[string]
 
-export type NotionPropertyType = NotionPagePropertiesValues['type']
+export type TNotionPropertyType = TNotionPagePropertiesValues['type']
 
-export type PartialUserObjectResponse = Extract<
-  NotionPagePropertiesValues,
+export type TPartiaTitleResponse = Extract<
+  TNotionPagePropertiesValues,
+  { type: 'title' }
+>
+
+export type TPartialUserObjectResponse = Extract<
+  TNotionPagePropertiesValues,
   { type: 'people' }
 >['people']
 
-export type UserObjectResponse = Extract<
+export type TUserObjectResponse = Extract<
   PartialUserObjectResponse,
   { type: 'person' }
 >

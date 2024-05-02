@@ -1,3 +1,5 @@
 {
-  "extends": ["@notion/eslint-config"]
+  "extends": [
+    "@notion/eslint-config"
+  ]
 }
