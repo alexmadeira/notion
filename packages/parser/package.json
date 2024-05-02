@@ -17,6 +17,7 @@
   "devDependencies": {
     "@notion/eslint-config": "*",
     "@notion/ts-config": "*",
+    "@types/lodash": "^4.17.0",
     "eslint": "^8",
     "eslint_d": "^13.1.2",
     "tsup": "^8.0.2",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
+    "lodash": "^4.17.21",
     "zod": "^3.23.5"
   }
 }
