@@ -1,0 +1,12 @@
+{
+  "name": "@notion/eslint-config",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "@wooden-script/eslint-config": "^1.0.4",
+    "eslint": "^8",
+    "eslint_d": "^13.1.2"
+  }
+}

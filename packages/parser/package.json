@@ -1,0 +1,29 @@
+{
+  "name": "@notion/parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "lint": "eslint src/**/*.ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@notion/eslint-config": "*",
+    "@notion/ts-config": "*",
+    "eslint": "^8",
+    "eslint_d": "^13.1.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "zod": "^3.23.5"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "notion",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@types/**"
+    ]
+  },
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "clear": "lerna clean -y",
+    "test": "lerna run test",
+    "test:watch": "lerna run test:watch",
+    "test:coverage": "lerna run test:coverage",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build && changeset publish",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint_d": "^13.1.2",
+    "husky": "^9.0.11",
+    "lerna": "^8.1.2",
+    "lint-staged": "^15.2.2",
+    "turbo": "^1.13.3"
+  }
+}
