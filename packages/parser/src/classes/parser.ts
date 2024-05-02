@@ -1,26 +1,26 @@
+import type { IParser } from '@/classes/parser'
 import type {
-  TPropertieCheckbox,
-  TPropertieDate,
-  TPropertieEmail,
-  TPropertieMultiSelect,
-  TPropertieNumber,
-  TPropertieRichText,
-  TPropertieSelect,
-  TPropertieTitle,
-  TPropertieUrl,
+  TPropertyCheckbox,
+  TPropertyDate,
+  TPropertyEmail,
+  TPropertyMultiSelect,
+  TPropertyNumber,
+  TPropertyRichText,
+  TPropertySelect,
+  TPropertyTitle,
+  TPropertyUrl,
 } from '@/notion/properties'
-import type { IParser } from '@/parser'
 
 import {
-  ZPropertieCheckbox,
-  ZPropertieDate,
-  ZPropertieEmail,
-  ZPropertieMultiSelect,
-  ZPropertieNumber,
-  ZPropertieRichText,
-  ZPropertieSelect,
-  ZPropertieTitle,
-  ZPropertieUrl,
+  ZPropertyCheckbox,
+  ZPropertyDate,
+  ZPropertyEmail,
+  ZPropertyMultiSelect,
+  ZPropertyNumber,
+  ZPropertyRichText,
+  ZPropertySelect,
+  ZPropertyTitle,
+  ZPropertyUrl,
 } from '@/notion/properties'
 
 export class Parser implements IParser {
@@ -28,49 +28,49 @@ export class Parser implements IParser {
     throw new Error(`${propertie} not Implemented`)
   }
 
-  public title(titlePropertie: TPropertieTitle) {
-    const { title } = ZPropertieTitle.parse(titlePropertie)
+  public title(titlePropertie: TPropertyTitle) {
+    const { title } = ZPropertyTitle.parse(titlePropertie)
     return title.length ? title[0].plain_text : ''
   }
 
-  public date(datePropertie: TPropertieDate) {
-    const { date } = ZPropertieDate.parse(datePropertie)
+  public date(datePropertie: TPropertyDate) {
+    const { date } = ZPropertyDate.parse(datePropertie)
     return date ? new Date(date.start) : null
   }
 
-  public number(numberPropertie: TPropertieNumber) {
-    const { number } = ZPropertieNumber.parse(numberPropertie)
+  public number(numberPropertie: TPropertyNumber) {
+    const { number } = ZPropertyNumber.parse(numberPropertie)
     return number ?? 0
   }
 
-  public checkbox(checkboxPropertie: TPropertieCheckbox) {
-    const { checkbox } = ZPropertieCheckbox.parse(checkboxPropertie)
+  public checkbox(checkboxPropertie: TPropertyCheckbox) {
+    const { checkbox } = ZPropertyCheckbox.parse(checkboxPropertie)
     return checkbox
   }
 
-  public select(selectPropertie: TPropertieSelect) {
-    const { select } = ZPropertieSelect.parse(selectPropertie)
+  public select(selectPropertie: TPropertySelect) {
+    const { select } = ZPropertySelect.parse(selectPropertie)
     return select ?? null
   }
 
-  public multi_select(multiSelectPropertie: TPropertieMultiSelect) {
+  public multi_select(multiSelectPropertie: TPropertyMultiSelect) {
     const { multi_select: multiSelect } =
-      ZPropertieMultiSelect.parse(multiSelectPropertie)
+      ZPropertyMultiSelect.parse(multiSelectPropertie)
     return multiSelect ?? []
   }
 
-  public rich_text(richTextPropertie: TPropertieRichText) {
-    const { rich_text: richText } = ZPropertieRichText.parse(richTextPropertie)
+  public rich_text(richTextPropertie: TPropertyRichText) {
+    const { rich_text: richText } = ZPropertyRichText.parse(richTextPropertie)
     return richText.reduce((a, v) => (a += v.plain_text), '')
   }
 
-  public url(urlPropertie: TPropertieUrl) {
-    const { url } = ZPropertieUrl.parse(urlPropertie)
+  public url(urlPropertie: TPropertyUrl) {
+    const { url } = ZPropertyUrl.parse(urlPropertie)
     return url ?? '#'
   }
 
-  public email(emailPropertie: TPropertieEmail) {
-    const { email } = ZPropertieEmail.parse(emailPropertie)
+  public email(emailPropertie: TPropertyEmail) {
+    const { email } = ZPropertyEmail.parse(emailPropertie)
     return email ?? null
   }
 

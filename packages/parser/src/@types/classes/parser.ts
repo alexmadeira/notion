@@ -1,42 +1,42 @@
-import { z } from 'zod'
-
 import {
-  ZPropertieCheckbox,
-  ZPropertieDate,
-  ZPropertieEmail,
-  ZPropertieMultiSelect,
-  ZPropertieNumber,
-  ZPropertieRichText,
-  ZPropertieSelect,
-  ZPropertieSelectContent,
-  ZPropertieTitle,
-  ZPropertieUrl,
-} from './notion/properties'
+  ZPropertyCheckbox,
+  ZPropertyDate,
+  ZPropertyEmail,
+  ZPropertyMultiSelect,
+  ZPropertyNumber,
+  ZPropertyRichText,
+  ZPropertySelect,
+  ZPropertySelectContent,
+  ZPropertyTitle,
+  ZPropertyUrl,
+} from '@/notion/properties'
+
+import { z } from 'zod'
 
 export const ZNotImplementedFunction = z.function().args().returns(z.void())
 
 export const ZParser = z.object({
-  title: z.function().args(ZPropertieTitle).returns(z.string()),
-  number: z.function().args(ZPropertieNumber).returns(z.number()),
-  checkbox: z.function().args(ZPropertieCheckbox).returns(z.boolean()),
-  rich_text: z.function().args(ZPropertieRichText).returns(z.string()),
-  url: z.function().args(ZPropertieUrl).returns(z.string()),
+  title: z.function().args(ZPropertyTitle).returns(z.string()),
+  number: z.function().args(ZPropertyNumber).returns(z.number()),
+  checkbox: z.function().args(ZPropertyCheckbox).returns(z.boolean()),
+  rich_text: z.function().args(ZPropertyRichText).returns(z.string()),
+  url: z.function().args(ZPropertyUrl).returns(z.string()),
   email: z
     .function()
-    .args(ZPropertieEmail)
+    .args(ZPropertyEmail)
     .returns(z.union([z.string().email(), z.null()])),
   multi_select: z
     .function()
-    .args(ZPropertieMultiSelect)
-    .returns(z.array(ZPropertieSelectContent)),
+    .args(ZPropertyMultiSelect)
+    .returns(z.array(ZPropertySelectContent)),
   date: z
     .function()
-    .args(ZPropertieDate)
+    .args(ZPropertyDate)
     .returns(z.union([z.date(), z.null()])),
   select: z
     .function()
-    .args(ZPropertieSelect)
-    .returns(z.union([ZPropertieSelectContent, z.null()])),
+    .args(ZPropertySelect)
+    .returns(z.union([ZPropertySelectContent, z.null()])),
 
   created_by: ZNotImplementedFunction,
   created_time: ZNotImplementedFunction,

@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { ZESelectColor } from './enums'
 
-export const ZPropertieTextContent = z.object({
+export const ZPropertyTextContent = z.object({
   type: z.literal('text'),
   text: z.object({
     content: z.string(),
@@ -10,25 +10,25 @@ export const ZPropertieTextContent = z.object({
   plain_text: z.string(),
 })
 
-export const ZPropertieSelectContent = z.object({
+export const ZPropertySelectContent = z.object({
   id: z.string(),
   name: z.string(),
   color: ZESelectColor.optional(),
 })
 
-export const ZPropertieTitle = z.object({
+export const ZPropertyTitle = z.object({
   id: z.string(),
   type: z.literal('title'),
-  title: z.array(ZPropertieTextContent),
+  title: z.array(ZPropertyTextContent),
 })
 
-export const ZPropertieRichText = z.object({
+export const ZPropertyRichText = z.object({
   id: z.string(),
   type: z.literal('rich_text'),
-  rich_text: z.array(ZPropertieTextContent),
+  rich_text: z.array(ZPropertyTextContent),
 })
 
-export const ZPropertieDate = z.object({
+export const ZPropertyDate = z.object({
   id: z.string(),
   type: z.literal('date'),
   date: z.object({
@@ -36,36 +36,36 @@ export const ZPropertieDate = z.object({
   }),
 })
 
-export const ZPropertieNumber = z.object({
+export const ZPropertyNumber = z.object({
   id: z.string(),
   type: z.literal('number'),
   number: z.coerce.number(),
 })
 
-export const ZPropertieCheckbox = z.object({
+export const ZPropertyCheckbox = z.object({
   id: z.string(),
   type: z.literal('checkbox'),
   checkbox: z.coerce.boolean(),
 })
 
-export const ZPropertieSelect = z.object({
+export const ZPropertySelect = z.object({
   id: z.string(),
   type: z.literal('select'),
-  select: ZPropertieSelectContent.optional(),
+  select: ZPropertySelectContent.optional(),
 })
 
-export const ZPropertieMultiSelect = z.object({
+export const ZPropertyMultiSelect = z.object({
   id: z.string(),
   type: z.literal('multi_select'),
-  multi_select: z.array(ZPropertieSelectContent).optional(),
+  multi_select: z.array(ZPropertySelectContent).optional(),
 })
 
-export const ZPropertieUrl = z.object({
+export const ZPropertyUrl = z.object({
   id: z.string(),
   type: z.literal('url'),
   url: z.string(),
 })
-export const ZPropertieEmail = z.object({
+export const ZPropertyEmail = z.object({
   id: z.string(),
   type: z.literal('url'),
   email: z.string().email(),
@@ -75,43 +75,15 @@ export const ZPropertieEmail = z.object({
 //
 //
 
-export type TPropertieText = z.infer<typeof ZPropertieTextContent>
-export type TPropertieSelectContent = z.infer<typeof ZPropertieSelectContent>
+export type TPropertyText = z.infer<typeof ZPropertyTextContent>
+export type TPropertySelectContent = z.infer<typeof ZPropertySelectContent>
 
-export type TPropertieTitle = z.infer<typeof ZPropertieTitle>
-export type TPropertieRichText = z.infer<typeof ZPropertieRichText>
-export type TPropertieDate = z.infer<typeof ZPropertieDate>
-export type TPropertieNumber = z.infer<typeof ZPropertieNumber>
-export type TPropertieCheckbox = z.infer<typeof ZPropertieCheckbox>
-export type TPropertieSelect = z.infer<typeof ZPropertieSelect>
-export type TPropertieMultiSelect = z.infer<typeof ZPropertieMultiSelect>
-export type TPropertieUrl = z.infer<typeof ZPropertieUrl>
-export type TPropertieEmail = z.infer<typeof ZPropertieEmail>
-
-// {
-//   "properties": {
-//     "Title": {
-//       "id": "title",
-//       "type": "title",
-//       "title": [
-//         {
-//           "type": "text",
-//           "text": {
-//             "content": "A better title for the page",
-//             "link": null
-//           },
-//           "annotations": {
-//             "bold": false,
-//             "italic": false,
-//             "strikethrough": false,
-//             "underline": false,
-//             "code": false,
-//             "color": "default"
-//           },
-//           "plain_text": "This is also not done",
-//           "href": null
-//         }
-//       ]
-//     }
-//   }
-// }
+export type TPropertyTitle = z.infer<typeof ZPropertyTitle>
+export type TPropertyRichText = z.infer<typeof ZPropertyRichText>
+export type TPropertyDate = z.infer<typeof ZPropertyDate>
+export type TPropertyNumber = z.infer<typeof ZPropertyNumber>
+export type TPropertyCheckbox = z.infer<typeof ZPropertyCheckbox>
+export type TPropertySelect = z.infer<typeof ZPropertySelect>
+export type TPropertyMultiSelect = z.infer<typeof ZPropertyMultiSelect>
+export type TPropertyUrl = z.infer<typeof ZPropertyUrl>
+export type TPropertyEmail = z.infer<typeof ZPropertyEmail>
