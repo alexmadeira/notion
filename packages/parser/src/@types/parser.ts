@@ -11,7 +11,7 @@ import {
   ZPropertieSelectContent,
   ZPropertieTitle,
   ZPropertieUrl,
-} from './properties'
+} from './notion/properties'
 
 export const ZNotImplementedFunction = z.function().args().returns(z.void())
 

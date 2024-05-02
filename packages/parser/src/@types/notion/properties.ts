@@ -1,8 +1,6 @@
 import { z } from 'zod'
 
-import { SELECT_COLORS } from './consantas'
-
-export const ZESelectColor = z.enum(SELECT_COLORS)
+import { ZESelectColor } from './enums'
 
 export const ZPropertieTextContent = z.object({
   type: z.literal('text'),
@@ -76,8 +74,6 @@ export const ZPropertieEmail = z.object({
 //
 //
 //
-
-export type TESelectColor = z.infer<typeof ZESelectColor>
 
 export type TPropertieText = z.infer<typeof ZPropertieTextContent>
 export type TPropertieSelectContent = z.infer<typeof ZPropertieSelectContent>

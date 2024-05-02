@@ -1,4 +1,3 @@
-import type { IParser } from '@/parser'
 import type {
   TPropertieCheckbox,
   TPropertieDate,
@@ -9,7 +8,8 @@ import type {
   TPropertieSelect,
   TPropertieTitle,
   TPropertieUrl,
-} from '@/properties'
+} from '@/notion/properties'
+import type { IParser } from '@/parser'
 
 import {
   ZPropertieCheckbox,
@@ -21,7 +21,7 @@ import {
   ZPropertieSelect,
   ZPropertieTitle,
   ZPropertieUrl,
-} from '@/properties'
+} from '@/notion/properties'
 
 export class Parser implements IParser {
   private notImplementedFunction(propertie: string) {
