@@ -1,74 +1,95 @@
 import { z } from 'zod'
 
-import { ZESelectColor } from './enums'
-
-export const ZPropertyTextContent = z.object({
-  type: z.literal('text'),
-  text: z.object({
-    content: z.string(),
-  }),
-  plain_text: z.string(),
-})
-
-export const ZPropertySelectContent = z.object({
-  id: z.string(),
-  name: z.string(),
-  color: ZESelectColor.optional(),
-})
+import {
+  ZPropertyDateContent,
+  ZPropertyFormulaContent,
+  ZPropertySelectContent,
+  ZPropertyTextContent,
+} from './propertyContents'
 
 export const ZPropertyTitle = z.object({
-  id: z.string(),
   type: z.literal('title'),
   title: z.array(ZPropertyTextContent),
 })
 
 export const ZPropertyRichText = z.object({
-  id: z.string(),
   type: z.literal('rich_text'),
   rich_text: z.array(ZPropertyTextContent),
 })
 
 export const ZPropertyDate = z.object({
-  id: z.string(),
   type: z.literal('date'),
-  date: z.object({
-    start: z.string(),
-  }),
+  date: ZPropertyDateContent,
 })
 
 export const ZPropertyNumber = z.object({
-  id: z.string(),
   type: z.literal('number'),
   number: z.coerce.number(),
 })
 
 export const ZPropertyCheckbox = z.object({
-  id: z.string(),
   type: z.literal('checkbox'),
   checkbox: z.coerce.boolean(),
 })
 
 export const ZPropertySelect = z.object({
-  id: z.string(),
   type: z.literal('select'),
   select: ZPropertySelectContent.optional(),
 })
 
 export const ZPropertyMultiSelect = z.object({
-  id: z.string(),
   type: z.literal('multi_select'),
   multi_select: z.array(ZPropertySelectContent).optional(),
 })
 
 export const ZPropertyUrl = z.object({
-  id: z.string(),
   type: z.literal('url'),
   url: z.string(),
 })
 export const ZPropertyEmail = z.object({
-  id: z.string(),
-  type: z.literal('url'),
+  type: z.literal('email'),
   email: z.string().email(),
+})
+export const ZPropertyFormula = z.object({
+  type: z.literal('formula'),
+  formula: ZPropertyFormulaContent,
+})
+export const ZPropertyUnknown = z.object({
+  type: z.string(),
+})
+
+export const ZProperty = z.union([
+  ZPropertyTitle,
+  ZPropertyRichText,
+  ZPropertyDate,
+  ZPropertyNumber,
+  ZPropertyCheckbox,
+  ZPropertySelect,
+  ZPropertyMultiSelect,
+  ZPropertyUrl,
+  ZPropertyEmail,
+  ZPropertyFormula,
+  ZPropertyUnknown,
+])
+
+export const ZProperties = z.record(
+  z.union([
+    ZPropertyTitle,
+    ZPropertyRichText,
+    ZPropertyDate,
+    ZPropertyNumber,
+    ZPropertyCheckbox,
+    ZPropertySelect,
+    ZPropertyMultiSelect,
+    ZPropertyUrl,
+    ZPropertyEmail,
+    ZPropertyFormula,
+    ZPropertyUnknown,
+  ]),
+)
+
+export const ZPropertyData = z.object({
+  properties: ZProperties,
 })
 
 //
@@ -87,3 +108,7 @@ export type TPropertySelect = z.infer<typeof ZPropertySelect>
 export type TPropertyMultiSelect = z.infer<typeof ZPropertyMultiSelect>
 export type TPropertyUrl = z.infer<typeof ZPropertyUrl>
 export type TPropertyEmail = z.infer<typeof ZPropertyEmail>
+export type TPropertyFormula = z.infer<typeof ZPropertyFormula>
+export type TProperty = z.infer<typeof ZProperty>
+export type TProperties = z.infer<typeof ZProperties>
+export type TPropertyData = z.infer<typeof ZPropertyData>

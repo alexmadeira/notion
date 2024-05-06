@@ -1,4 +1,5 @@
 import { requestData } from '~/temp/notion'
+
 import { ParserBuilder } from './parser'
 import { SchemaBuilder } from './schema'
 

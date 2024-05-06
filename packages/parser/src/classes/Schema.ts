@@ -1,24 +1,23 @@
-import type {
-  ISchema,
-  TSchemaData,
-  TSchemaProperty,
-  TSchemaProps,
-} from '@/classes/schema'
+import type { ISchema, TSchemaData, TSchemaProps } from '@/classes/schema'
 
 import { ZSchemaProps } from '@/classes/schema'
 
 import _ from 'lodash'
 
 export class Schema implements ISchema {
-  private _schemaData: TSchemaData = []
+  private _schemaData: TSchemaData = {}
 
   constructor(props: TSchemaProps) {
-    const schema = _.concat([], ZSchemaProps.parse(props))
+    const schema = ZSchemaProps.parse(props)
 
-    this.schemaData(schema)
+    this.setSchemaData(schema)
   }
 
-  private schemaData(schemaProperties: TSchemaProperty[]) {
-    this._schemaData = _.concat(this._schemaData, schemaProperties)
+  private setSchemaData(schemaProperties: TSchemaData) {
+    this._schemaData = { ...this._schemaData, ...schemaProperties }
+  }
+
+  public get schemaData() {
+    return this._schemaData
   }
 }
