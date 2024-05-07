@@ -1,12 +1,16 @@
-import { ZProperties } from '@/notion/properties'
+import type { TPagination, TResponseDatabaseResult } from './client'
+import type { TSchemaValues } from './schema'
+import type { TProperties, TPropertyData } from '@/notion/properties'
+import type { CreatePageParameters } from '@notionhq/client/build/src/api-endpoints'
 
-import { z } from 'zod'
+export type TQueryDatabaseResponse = {
+  pagination: TPagination
+  results: TResponseDatabaseResult[]
+}
 
-import { ZSchemaValues } from './schema'
-
-export const ZParser = z.object({
-  toSchema: z.function().args(ZProperties).returns(ZSchemaValues),
-  databaseResponse: z.function().args(z.any()).returns(z.void()),
-  schemaToNotion: z.function().args(ZSchemaValues).returns(z.void()),
-})
-export interface IParser extends z.infer<typeof ZParser> {}
+export interface IParser<TSchema = TSchemaValues> {
+  toSchema(props: TProperties): TSchema
+  schemaToNotion(props: TSchema): CreatePageParameters['properties']
+  databaseResponse(props: TQueryDatabaseResponse): TSchema[]
+  pageResponse(props: TPropertyData): TSchema
+}

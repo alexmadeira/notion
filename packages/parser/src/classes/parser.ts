@@ -1,60 +1,48 @@
-import type { IParser } from '@/classes/parser'
-import type { ISchema, TSchemaValue, TSchemaValues } from '@/classes/schema'
-import type { TProperties } from '@/notion/properties'
-import type {
-  CreatePageParameters,
-  PageObjectResponse,
-  QueryDatabaseResponse,
-} from '@notionhq/client/build/src/api-endpoints'
+import type { IParser, TQueryDatabaseResponse } from '@/classes/parser'
+import type { ISchema, TSchemaValues } from '@/classes/schema'
+import type { TProperties, TPropertyData } from '@/notion/properties'
+import type { CreatePageParameters } from '@notionhq/client/build/src/api-endpoints'
 
-import { ZSchema, ZSchemaValues } from '@/classes/schema'
+import { ZSchemaValues } from '@/classes/schema'
 import { ZProperties, ZPropertyData } from '@/notion/properties'
 
 import _ from 'lodash'
 
-import { notionToSchema, schemaToNotion } from './utils'
+import { notionToSchema, schemaToNotion } from '~/utils'
 
-type RemoveId<T> = Exclude<T, `${string}Id`>
+export class Parser<TSchema extends TSchemaValues> implements IParser<TSchema> {
+  private readonly _Schema: ISchema<TSchema>
 
-export class Parser<S extends string> implements IParser {
-  private readonly _Schema: ISchema
-
-  constructor(props: ISchema) {
-    this._Schema = ZSchema.parse(props)
+  constructor(props: ISchema<TSchema>) {
+    this._Schema = props
   }
 
   public toSchema(data: TProperties) {
     const properties = ZProperties.parse(data)
     const schemaValues: TSchemaValues = {}
 
-    Object.entries(this._Schema.schemaData).forEach(([key, value]) => {
+    _.mapKeys(this._Schema.schemaData, (value, key) => {
       if (properties[key]) {
         schemaValues[key] = notionToSchema[value](properties[key])
       }
     })
 
-    return schemaValues
+    return schemaValues as TSchema
   }
 
-  public databaseResponse<T = TSchemaValues>(
-    results: QueryDatabaseResponse['results'],
-  ) {
-    const response = _.map(results, (data) => {
+  public databaseResponse(props: TQueryDatabaseResponse) {
+    return _.map(props.results, (data) => {
       const { properties } = ZPropertyData.parse(data)
       return this.toSchema(properties)
     })
-
-    return response as T[]
   }
 
-  public pageResponse<T = TSchemaValues>(pageResponse: PageObjectResponse) {
-    const { properties } = ZPropertyData.parse(pageResponse)
-    const response = this.toSchema(properties)
-
-    return response as T
+  public pageResponse(props: TPropertyData) {
+    const { properties } = ZPropertyData.parse(props)
+    return this.toSchema(properties)
   }
 
-  public schemaToNotion(schemaValues: Record<RemoveId<S>, TSchemaValue>) {
+  public schemaToNotion(schemaValues: OmitId<TSchema>) {
     const values = ZSchemaValues.parse(schemaValues)
     const properties: CreatePageParameters['properties'] = {}
 

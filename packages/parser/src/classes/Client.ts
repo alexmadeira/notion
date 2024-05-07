@@ -1,38 +1,35 @@
 import type {
-  CreatePageParameters,
-  CreatePageResponse,
-  PageObjectResponse,
-  QueryDatabaseParameters,
-  UpdatePageParameters,
-  UpdatePageResponse,
-} from '@notionhq/client/build/src/api-endpoints'
+  IClient,
+  TResponseDatabaseResult,
+  TResponsePage,
+} from '@/classes/client'
+import type {
+  TCreatePageProperties,
+  TQueryFirstOptions,
+  TQueryOptions,
+  TUpdatePageProperties,
+} from '@/hacks/notion'
 
 import { Client as NotionClient } from '@notionhq/client'
 
-export class Client {
+export class Client implements IClient {
   private readonly _notion: NotionClient
 
-  private readonly _pageSize?: number = 10000
-  private readonly _filter?: QueryDatabaseParameters['filter']
-  private readonly _sorts?: QueryDatabaseParameters['sorts']
+  private readonly _queryOptions: TQueryOptions = {}
 
   constructor(notionToken: string) {
     this._notion = new NotionClient({ auth: notionToken })
   }
 
-  public async findMany(
-    databaseId: string,
-    filter?: QueryDatabaseParameters['filter'],
-    sorts?: QueryDatabaseParameters['sorts'],
-    pageSize?: number,
-    start?: string,
-  ) {
+  public async findMany(databaseId: string, queryOptions: TQueryOptions = {}) {
+    const options = { ...this._queryOptions, ...queryOptions }
+
     const databaseResponse = await this._notion.databases.query({
       database_id: databaseId,
-      filter: filter || this._filter,
-      sorts: sorts || this._sorts,
-      page_size: pageSize || this._pageSize,
-      start_cursor: start,
+      filter: options.filter,
+      sorts: options.sorts,
+      page_size: options.pageSize,
+      start_cursor: options.start,
     })
 
     return {
@@ -40,21 +37,19 @@ export class Client {
         nextCursor: databaseResponse.next_cursor,
         hasMore: databaseResponse.has_more,
       },
-      results: databaseResponse.results,
+      results: databaseResponse.results as TResponseDatabaseResult[],
     }
   }
 
   public async findFirst(
     databaseId: string,
-    filter?: QueryDatabaseParameters['filter'],
-    sorts?: QueryDatabaseParameters['sorts'],
+    queryOptions: TQueryFirstOptions = {},
   ) {
-    const databaseResponse = await this.findMany(databaseId, filter, sorts, 1)
+    const options = { ...this._queryOptions, ...queryOptions }
 
-    return {
-      pagination: databaseResponse.pagination,
-      result: databaseResponse.results[0],
-    }
+    const databaseResponse = await this.findMany(databaseId, options)
+
+    return databaseResponse.results[0]
   }
 
   public async findUnique(pageId: string) {
@@ -62,13 +57,10 @@ export class Client {
       page_id: pageId,
     })
 
-    return databaseResponse as PageObjectResponse
+    return databaseResponse as TResponsePage
   }
 
-  public async create(
-    databaseId: string,
-    properties: CreatePageParameters['properties'],
-  ): Promise<CreatePageResponse> {
+  public async create(databaseId: string, properties: TCreatePageProperties) {
     return await this._notion.pages.create({
       parent: {
         type: 'database_id',
@@ -80,8 +72,8 @@ export class Client {
 
   public async createMany(
     databaseId: string,
-    listProperties: CreatePageParameters['properties'][],
-  ): Promise<CreatePageResponse[]> {
+    listProperties: TCreatePageProperties[],
+  ) {
     return await Promise.all(
       listProperties.map(async (properties) =>
         this.create(databaseId, properties),
@@ -89,17 +81,14 @@ export class Client {
     )
   }
 
-  public async update(
-    pageId: string,
-    properties: UpdatePageParameters['properties'],
-  ): Promise<UpdatePageResponse> {
+  public async update(pageId: string, properties: TUpdatePageProperties) {
     return await this._notion.pages.update({
       page_id: pageId,
       properties,
     })
   }
 
-  public async delete(pageId: string): Promise<UpdatePageResponse> {
+  public async delete(pageId: string) {
     return await this._notion.pages.update({
       page_id: pageId,
       in_trash: true,

@@ -1,6 +1,6 @@
 {
   "extends": "@notion/ts-config/base.json",
-  "include":["src"],
+  "include":["src","src/@types"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

@@ -26,7 +26,7 @@ function string(value: TSchemaValue) {
   const content = ZSchemaStringValue.parse(value)
 
   return {
-    title: [
+    rich_text: [
       {
         text: {
           content,

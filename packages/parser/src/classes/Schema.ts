@@ -1,15 +1,15 @@
-import type { ISchema, TSchemaData } from '@/classes/schema'
+import type { ISchema, TSchemaData, TSchemaValues } from '@/classes/schema'
 import type { TESupportedProperties } from '@/notion/enums'
 
-import { ZSchemaProps } from '@/classes/schema'
+import { ZSchemaData } from '@/classes/schema'
 
 import _ from 'lodash'
 
-export class Schema<T extends string> implements ISchema {
+export class Schema<TSchema extends TSchemaValues> implements ISchema {
   private _schemaData: TSchemaData = {}
 
-  constructor(props: Record<T, TESupportedProperties>) {
-    const schema = ZSchemaProps.parse(props)
+  constructor(props: Record<keyof TSchema, TESupportedProperties>) {
+    const schema = ZSchemaData.parse(props)
 
     this.setSchemaData(schema)
   }
@@ -19,10 +19,6 @@ export class Schema<T extends string> implements ISchema {
   }
 
   public get schemaData() {
-    return this._schemaData as Record<T, TESupportedProperties>
-  }
-
-  public get schemaKeys() {
-    return _.keys(this._schemaData)
+    return this._schemaData as Record<keyof TSchema, TESupportedProperties>
   }
 }

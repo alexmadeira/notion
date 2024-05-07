@@ -1,4 +1,4 @@
-import { ZESupportedProperties } from '@/notion/enums'
+import { TESupportedProperties, ZESupportedProperties } from '@/notion/enums'
 
 import { z } from 'zod'
 
@@ -20,7 +20,6 @@ export const ZSchemaValue = z.union([
 
 export const ZSchemaValues = z.record(ZSchemaValue)
 
-export const ZSchemaProps = ZSchemaData
 export const ZSchema = z.object({
   schemaData: ZSchemaData,
 })
@@ -33,5 +32,6 @@ export type TSchemaData = z.infer<typeof ZSchemaData>
 export type TSchemaValue = z.infer<typeof ZSchemaValue>
 export type TSchemaValues = z.infer<typeof ZSchemaValues>
 
-export type TSchemaProps = z.infer<typeof ZSchemaProps>
-export interface ISchema extends z.infer<typeof ZSchema> {}
+export interface ISchema<TSchema = TSchemaValues> {
+  schemaData: Record<keyof TSchema, TESupportedProperties>
+}
