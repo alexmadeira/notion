@@ -13,6 +13,7 @@ export const SELECT_COLORS = [
 
 export const SUPPORTED_PROPERTIES = [
   'id',
+  'title',
   'string',
   'boolean',
   'number',
