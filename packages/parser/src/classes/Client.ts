@@ -1,12 +1,13 @@
-import { Client as NotionClient } from '@notionhq/client'
-import {
+import type {
   CreatePageParameters,
   CreatePageResponse,
+  PageObjectResponse,
   QueryDatabaseParameters,
-  QueryDatabaseResponse,
   UpdatePageParameters,
   UpdatePageResponse,
 } from '@notionhq/client/build/src/api-endpoints'
+
+import { Client as NotionClient } from '@notionhq/client'
 
 export class Client {
   private readonly _notion: NotionClient
@@ -25,22 +26,43 @@ export class Client {
     sorts?: QueryDatabaseParameters['sorts'],
     pageSize?: number,
     start?: string,
-  ): Promise<QueryDatabaseResponse> {
-    return await this._notion.databases.query({
+  ) {
+    const databaseResponse = await this._notion.databases.query({
       database_id: databaseId,
       filter: filter || this._filter,
       sorts: sorts || this._sorts,
       page_size: pageSize || this._pageSize,
       start_cursor: start,
     })
+
+    return {
+      pagination: {
+        nextCursor: databaseResponse.next_cursor,
+        hasMore: databaseResponse.has_more,
+      },
+      results: databaseResponse.results,
+    }
   }
 
   public async findFirst(
     databaseId: string,
     filter?: QueryDatabaseParameters['filter'],
     sorts?: QueryDatabaseParameters['sorts'],
-  ): Promise<QueryDatabaseResponse> {
-    return await this.findMany(databaseId, filter, sorts, 1)
+  ) {
+    const databaseResponse = await this.findMany(databaseId, filter, sorts, 1)
+
+    return {
+      pagination: databaseResponse.pagination,
+      result: databaseResponse.results[0],
+    }
+  }
+
+  public async findUnique(pageId: string) {
+    const databaseResponse = await this._notion.pages.retrieve({
+      page_id: pageId,
+    })
+
+    return databaseResponse as PageObjectResponse
   }
 
   public async create(

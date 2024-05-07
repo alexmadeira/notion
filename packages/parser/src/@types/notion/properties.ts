@@ -19,7 +19,7 @@ export const ZPropertyRichText = z.object({
 
 export const ZPropertyDate = z.object({
   type: z.literal('date'),
-  date: ZPropertyDateContent,
+  date: ZPropertyDateContent.optional(),
 })
 
 export const ZPropertyNumber = z.object({

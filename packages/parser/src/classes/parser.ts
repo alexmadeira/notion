@@ -1,26 +1,29 @@
 import type { IParser } from '@/classes/parser'
-import type { ISchema, TSchemaValues } from '@/classes/schema'
+import type { ISchema, TSchemaValue, TSchemaValues } from '@/classes/schema'
 import type { TProperties } from '@/notion/properties'
+import type {
+  CreatePageParameters,
+  PageObjectResponse,
+  QueryDatabaseResponse,
+} from '@notionhq/client/build/src/api-endpoints'
 
 import { ZSchema, ZSchemaValues } from '@/classes/schema'
 import { ZProperties, ZPropertyData } from '@/notion/properties'
 
-import {
-  CreatePageParameters,
-  QueryDatabaseResponse,
-} from '@notionhq/client/build/src/api-endpoints'
 import _ from 'lodash'
 
 import { notionToSchema, schemaToNotion } from './utils'
 
-export class Parser implements IParser {
+type RemoveId<T> = Exclude<T, `${string}Id`>
+
+export class Parser<S extends string> implements IParser {
   private readonly _Schema: ISchema
 
   constructor(props: ISchema) {
     this._Schema = ZSchema.parse(props)
   }
 
-  private toIntoSchema(data: TProperties) {
+  public toSchema(data: TProperties) {
     const properties = ZProperties.parse(data)
     const schemaValues: TSchemaValues = {}
 
@@ -33,16 +36,25 @@ export class Parser implements IParser {
     return schemaValues
   }
 
-  public queryDatabase<T = unknown>(queryResponse: QueryDatabaseResponse) {
-    const response = _.map(queryResponse.results, (data) => {
+  public databaseResponse<T = TSchemaValues>(
+    results: QueryDatabaseResponse['results'],
+  ) {
+    const response = _.map(results, (data) => {
       const { properties } = ZPropertyData.parse(data)
-      return this.toIntoSchema(properties)
+      return this.toSchema(properties)
     })
 
     return response as T[]
   }
 
-  public schemaToNotion(schemaValues: TSchemaValues) {
+  public pageResponse<T = TSchemaValues>(pageResponse: PageObjectResponse) {
+    const { properties } = ZPropertyData.parse(pageResponse)
+    const response = this.toSchema(properties)
+
+    return response as T
+  }
+
+  public schemaToNotion(schemaValues: Record<RemoveId<S>, TSchemaValue>) {
     const values = ZSchemaValues.parse(schemaValues)
     const properties: CreatePageParameters['properties'] = {}
 
